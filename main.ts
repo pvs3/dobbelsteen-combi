@@ -1,15 +1,29 @@
-let getal = 0
 let rij = 0
 let kol = 0
+let getal = 0
 input.onButtonPressed(Button.A, function () {
     basic.showNumber(randint(1, 6))
     music.play(music.stringPlayable("C D E F G A B C5 ", 120), music.PlaybackMode.UntilDone)
 })
 input.onGesture(Gesture.Shake, function () {
-    for (let index = 0; index <= 24; index++) {
-        Toongetal(index)
-        basic.pause(100)
+    basic.clearScreen()
+    for (let index = 0; index <= 0; index++) {
         basic.clearScreen()
+        Toongetal(24 - index)
+        serial.writeValue("getal", index)
+        serial.writeString("")
+        serial.writeValue("x", rij)
+        serial.writeString("")
+        serial.writeValue("y", kol)
+        serial.writeLine("")
+        basic.pause(500)
+    }
+    basic.clearScreen()
+    for (let index2 = 0; index2 <= 4; index2++) {
+        for (let index = 0; index <= 4; index++) {
+            led.plot(index, 4 - index2)
+            basic.pause(500)
+        }
     }
 })
 input.onButtonPressed(Button.AB, function () {
@@ -42,26 +56,27 @@ input.onButtonPressed(Button.B, function () {
         basic.pause(100)
     }
     basic.pause(100)
-    getal = 0
-    basic.showNumber(getal)
     basic.clearScreen()
+    getal = 24
+    Toongetal(getal)
+})
+input.onPinPressed(TouchPin.P1, function () {
     while (input.pinIsPressed(TouchPin.P1)) {
-        getal += 1
-        Toongetal(getal)
-        basic.pause(1000)
+    	
     }
     music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.UntilDone)
-    basic.showNumber(getal)
+    getal += -1
+    serial.writeNumber(getal)
+    serial.writeLine("")
+    basic.clearScreen()
+    Toongetal(getal)
 })
 function Toongetal (num: number) {
-    rij = num / 5
+    rij = Math.floor(num / 5)
     kol = num % 5
-    for (let index = 0; index <= rij; index++) {
-        serial.writeNumber(index)
+    for (let index = 0; index <= rij - 0; index++) {
         for (let index2 = 0; index2 <= kol; index2++) {
-            serial.writeNumber(index2)
-            led.plot(index, index2)
+            led.plot(index, 4 - index2)
         }
-        serial.writeLine("")
     }
 }
